@@ -1,13 +1,14 @@
 // Utilities
 import { defineComponent } from 'vue';
+import { makeComponentProps } from '@/composables/component';
 import { convertToUnit, propsFactory } from '@/util';
 
-type AXTableProps = {
-  default: never;
-  top: never;
-  bottom: never;
-  wrapper: never;
-};
+// type AXTableProps = {
+//   default: never;
+//   top: never;
+//   bottom: never;
+//   wrapper: never;
+// };
 
 export const makeVTableProps = propsFactory({
   tag: String,
@@ -21,6 +22,7 @@ export const AXTable = defineComponent({
   name: 'AXTable',
 
   props: {
+    ...makeComponentProps(),
     ...makeVTableProps({
       tag: 'table',
     }),
@@ -31,19 +33,13 @@ export const AXTable = defineComponent({
       <props.tag class={[props.class]} style={props.style}>
         {slots.top?.()}
 
-        {slots.default ? (
-          <div style={{ height: convertToUnit(props.height) }}>
-            <table>{slots.default()}</table>
-          </div>
-        ) : (
-          slots.wrapper?.()
-        )}
+        <div style={{ height: convertToUnit(props.height) }}>
+          <table>{slots.default?.()}</table>
+        </div>
 
         {slots.bottom?.()}
       </props.tag>
     );
-
-    return {};
   },
 });
 
